@@ -4,16 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.cw98.spring02.mapper.TodoMapper">
-
-    <select id="selectTods" resultType="hashmap">
-        SELECT TNO
-	        , TITLE 
-	        , DUEDATE 
-	        , WRITER 
-	        , ISDONE
-        FROM TODOS;
+    <select id="selectTodoAll" resultType="Todo">
+        SELECT tno
+            ,   title
+            ,   duedate
+            ,   writer
+            ,   isdone
+            FROM TODOS
     </select>
-
-    <select>
+    <select id="selectTodoByTno" resultType="Todo" parameterType="int">
+        SELECT tno
+            ,   title
+            ,   duedate
+            ,   writer
+            ,   isdone
+            FROM TODOS WHERE TNO = #{tno}
     </select>
 </mapper>

@@ -131,11 +131,21 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
 - Spring Boot + MyBatis
     - application name : spring02
     - springboot 3.3.x에는 mtbatis 없음
-    - 3.2.6 -> java -> com.cw99 -> spring02 -> jar -> 17 -> 6개 선택
-    - Dependency 중 DB(H2, Oracle, MYSQL) 가 선택되어 있으면 웹서버 실행이 안됨
+    - 3.2.6 선택 -> java -> com.cw99 -> spring02 -> jar -> 17 -> 6개 선택
+    - Dependency
+        - Spring Boot DevTools
+        - Spring Web
+        - Thymeleaf
+        - Oracle Driver
+        - MyBatis Driver
+        - Mybatis starter
+        - Lombok
+
+    - Dependency 중 DB(H2, Oracle, MYSQL) 가 선택되어 있으면 웹서버 실행이 안됨. application.properties에 DB설정 안되면 서버 실행 안됨
         
     - build.gradle확인
      - application.properties 추가작성
+
     ```properties
 
        spring.application.name=spring02
@@ -164,10 +174,24 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
     ## MyBatis 설정
     ## mapper 폴더 밑에 여러가지 폴더가 내재, 확장자는 .xml이지만 파일명은 뭐든지
     mybatis.mapper-locations=classpath:mapper/**/*.xml
-    mybatis.type-aliases-package=com.cw98.spring02.domain
+    mybatis.type-aliases-package=com.cw98.spring02.mapper
             
     ```
 
     - MyBatis 적용
         - Spring, resource/WEB-INF 위치에 root-context.xml에 DB, Mybatis 설정
         - SpringBoot 이후 application.properties + Config.java로 변경
+
+    - MyBatis 개발시 순서
+        0. application.properties jdbc:oracle:thin:@localhost:1521:FREE , thin뒤 :이 삭제되어 있었음
+        1. Database 테이블 생성
+        2. MyBatis 설정 -> /config/MyBatisConfig.java
+        3. 테이블과 일치하는 클래스(domain, entity, dto, vo, ...) 생성
+            - 테이블 컬럼 _는 Java클래스는 사용 안함
+        4. DB에 데이터를 주고받을 수 있는 클래스 (dao, **mapper**, repository ...) 생성
+            - 쿼리를 클래스내 작성가능, xml로 분리 가능
+        5. (Model) 분리했을 경우 /resources/mapper/클래스.xml 생성, 쿼리 입력
+        6. 서비스 인터페이스 /service/*Service.java, 서비스 구현한 클래스 /service/*serviceImpl.java 생성 작성
+        7. 사용자 접근하는 컨트롤러 @RestController 클래스 생성 -> @Controller 변경 가능
+        8. (Controller)경우에 따라 @SpringBootApplication 클래스에 SqlSessionFactory 빈을 생성 메서드 작성
+        9. (View) /resource/templates/ Thymeleaf html 생성, 작성

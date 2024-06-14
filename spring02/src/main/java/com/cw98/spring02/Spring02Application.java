@@ -1,4 +1,4 @@
-package com.cw99.spring02;
+package com.cw98.spring02;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
