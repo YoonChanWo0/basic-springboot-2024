@@ -233,3 +233,120 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
     12. /repository/ReplyRepository.java 빈 인터페이스(jpaReposity 상속)생성
     13. application.properties ddl-auto=create -> ddl-auto=update 변경
     14. /test/.../repository/BoardRepositoryTest.java 생성, 테스트 메서드
+    15. 테스트 시작 > 웹 서버 실행 > h2-console 확인
+
+    ## 5일차
+- Tip
+	- Java Test 중 OpenJDK 64-Bit Server VM warning: Sharing is 빨간색 경고가 뜨면
+	- Ctrl + ,(설정) > Java Test Config 검색 > settings.json 편집
+	```json
+	"java.test.config": {
+        "vmArgs": [
+            "-Xshare:off"
+        ]
+    }
+	```
+	- 저장 후 실행
+
+- Spring Boot 프로젝트 오류처리
+	- 빌드를 해도 제대로 결과가 반영안되면
+	- Github Remote Repository 에 모두 커밋, 푸시 후
+	- Local Repository를 모두 삭제 후 새로 커밋
+	- 프로젝트 새로 로드, 초기화 
+
+- Spring Boot JPA 프로젝트 개발 계속
+	1. jUnit 테스트로 CRUD 확인
+	2. /service/BoardService.java 생성 후 getList() 메서드 작성
+	3. /controller/BoardController.java 생성 후 /board/list 실행할 수 있는 메서드 작성
+	4. /templates/board/list.html 생성
+		- Thymeleaf 속성
+			- th:if="${board != null}"
+			- th:each="board : ${boardList}"
+			- th:text="${board.title}"
+	5. /service/BoardSerivce.java에 getBoard() 메서드 추가
+	6. /controller/BoardController.java에 /board/detail/{bno} 실행 메서드 작성
+	7. /templates/board/detail.html 생성
+
+		<img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp003.png" width="730">
+
+	8. /templates/board/detail.html에 댓글영역 추가
+	9. /service/ReplyService.java 생성, 댓글 저장 메서드 작성
+	10. /controller/ReplyController.java 생성, /reply/create/{bno} 포스트매핑 메서드 작성
+	
+	11. Bootstrap 적용
+		- 다운로드 후 프로젝트에 위치
+		- CDN 링크를 추가
+		- https://www.getbootstrap.com 다운로드 후 압축 해제
+		- boostrap.min.css, bootstrap.min.js templates/static 에 위치
+	12. /templates/board/list.html, detail.html 부트스트랩 적용
+
+		<img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp004.png" width="730">
+	
+
+## 6일차
+- Spring Boot JPA 프로젝트 개발 계속
+	1. (설정) build.gradle Thymeleaf 레이아웃 사용을 위한 디펜던시 추가
+	2. /templates/layout.html Thymeleaf로 레이아웃 템플릿 생성
+	3. list.html, detail.html 레이아웃 템플릿 적용
+	4. /templates/layout.html에 Bootstrap CDN 적용
+	5. /templates/board/list.html에 게시글 등록버튼 추가
+	6. /templates/board/create.html 게시글 작성 페이지 생성
+	7. /controller/BoardController.java create() GetMapping 메서드 작성
+	8. /service/BoardService.java setBoard() 작성
+	9. /controller/BoardController.java create() PostMapping 메서드 작성
+	10. (문제) 아무내용도 안적어도 저장됨
+	11. (설정) build.gradle 입력값 검증 Spring Boot Validation 디펜던시 추가
+	12. /validation/BoardForm.java 클래스 생성
+	13. /controller/BoardController.java에 BoardForm을 전달(Get, PostMapping 둘다)
+	14. create.html 입력항목 name, id를 th:field로 변경(ex. th:field="*{title}")
+	15. 댓글등록에도 반영. ReplyForm, ReplyController, detail.html 작업(12 ~ 14 내용과 유사)
+	16. detail.html 경고영역 div는 create.html에서 복사해서 가져올 것
+	17. (문제) 각 입력창에 공백을 넣었을 때 입력되는 문제 @NotEmpty는 스페이스를 허용 -> @NotBlank로 변경
+
+		<img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp005.png" width="730">
+
+	18. /templates/layout.html에 네비게이션바(navbar) 추가
+	19. 테스트로 대량 데이터 추가
+
+## 7일차
+- Spring Boot JPA 프로젝트 개발 계속
+    0. 개념
+        ```sql
+        -- Oracle 전용(11g 이하는 이 쿼리가 동작안함)
+        select b1_0.bno,b1_0.content,b1_0.create_date,b1_0.title 
+            from board b1_0 offset 0 -- 0 부터 시작해서 페이지 사이즈만큼 증가
+            rows fetch first 10 rows only -- 페이지 사이즈
+        ```
+	1. 페이징 
+        - /repository/BoardRepository.java findAll(pageable) 인터페이스 메서드 작성
+        - /service/BoardService.java getList(page) 메서드 작성
+        - controller/BoardController.java list() 메서드 수정
+        - /templates/board/list.html boardList -> paging 변경
+        - /templates/board/list.html 하단 페이징 버튼 추가, thymeleaf 기능추가
+        - /service/BoardService.java getList() 최신순 역정렬로 변경
+        - /templates/board/list.html에 게시글 번호 수정
+
+        <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp006.png" width="730">
+
+    2. /templates/board/list.html td 벳지태그 추가
+
+        - (설정) build.gradle 스프링
+        - (설정) Gradle 재빌드, 서버 실행
+        - user / 로그상 UUID(서버 실행시 마다 변경) 입력
+        - /security/SecurityConfig.java 보안설정 파일 생성, 작성 -> 시큐리티를 다시 풀어주는 일
+
+    3. H2 -> Oracle로 DB변경
+        - build.gradle, Oracle dependencies 추가
+        - application.properties Oracle 관련 설정 추가, H2 관련 설정 주석처리
+        - 재시작
+
+    4. 스프링 시큐리티(이것도 중요 !)
+        - (설정) build.gradle 스프링 시큐리티 관련 디펜던시 추가
+        - (설정) Gradle 재빌드, 서버 실행
+        - user / 터미널 로그에 나오는 UUID 입력
+            - UUID는 실행할 때 마다 변경됨
+        - /security/SecurityConfig.java 보안설정 파일 생성, 작성 -> 시큐리티를 다시 풀어주기
+
+        - /entity/Entity.java 생성
+        - /repository/MemberRepository.java 인터페이스 생성
+        - /service/MemberService.java 생성 setMember() 메서드 작성
