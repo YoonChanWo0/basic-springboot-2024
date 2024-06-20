@@ -15,7 +15,7 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
         - DB 연동이 무지 쉽다
 
         - MVC
-            <img src="https://github.com/YoonChanWo0/basic-springboot-2024/main/images/sp002.png" width="730">
+            <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp001.png" width="730">
 
 - Spring Boot 개발환경 설정
     - Java JDK 확인 > 17버전 이상
@@ -70,7 +70,7 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
                 - App > Spring01 run | Debug 중에서 하나 아이콘 클릭 서버 실행
                 - 디버그로 실행해야 Hot code replace가 동작
 
-                 <img src="https://github.com/YoonChanWo0/basic-springboot-2024/main/images/sp001.png" width="730">
+                 <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp002.png" width="730">
 
                 - 브라우저 변경설정
                     - 설정(ctrl + ,) > browser > Spring > Dashbord Open With 'Internal' -> 'external'로 변경
