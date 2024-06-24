@@ -42,7 +42,7 @@ dependencies {
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	// 입력값 검증 디펜던시
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	// 스프링 시큐리티 디펜턴시
+	// 스프링 시큐리티 디펜던시
 	implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 }
