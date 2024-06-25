@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.cw98.backboard.common.NotFoundException;
 import com.cw98.backboard.entity.Board;
+import com.cw98.backboard.entity.Category;
 import com.cw98.backboard.entity.Member;
 import com.cw98.backboard.entity.Reply;
 import com.cw98.backboard.repository.BoardRepository;
@@ -57,6 +58,18 @@ public class BoardService {
         return this.boardRepository.findAllByKeyword(keyword, pageable);
     }
 
+      // 24.06.24 카테고리 추가
+      public Page<Board> getList(int page , String keyword, Category category) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); 
+
+        Specification<Board> spec = searchBoard(keyword, category.getId());
+        return this.boardRepository.findAll(spec, pageable); // Specification로 쿼리 생성로직 만들어서
+        // return this.boardRepository.findAllByKeyword(keyword, pageable);
+    }
+
+
     public Board getBoard(Long bno) {
         Optional<Board> board = this.boardRepository.findById(bno);
         if (board.isPresent()) { // 데이터가 존재하면
@@ -73,6 +86,15 @@ public class BoardService {
         Board board = Board.builder().title(title).content(content)
                         .createDate(LocalDateTime.now()).build();
         
+        board.setWriter(writer);
+        this.boardRepository.save(board); // PK가 없으면 INSERT
+    }
+    // 24.06.25 category저장 추가
+    public void setBoard(String title, String content, Member writer, Category category) {
+        // 빌더로 생성한 객체
+        Board board = Board.builder().title(title).content(content)
+                        .createDate(LocalDateTime.now()).build();
+        board.setCategory(category); // 카테고리 추가
         board.setWriter(writer);
         this.boardRepository.save(board); // PK가 없으면 INSERT
     }
@@ -106,6 +128,29 @@ public class BoardService {
                             );
             }
 
+        };
+    }
+
+    // 카테고리 추가된 메서드.
+    public Specification<Board> searchBoard(String keyword, Integer cateId) {
+        return new Specification<Board>() {
+            private static final long serialVersionUID = 1L;
+    
+            @SuppressWarnings("null")
+            @Override
+            public Predicate toPredicate(Root<Board> b, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true); // 중복 제거
+                Join<Board, Reply> r = b.join("replyList", JoinType.LEFT); 
+                
+                return cb.and(
+                    cb.equal(b.get("category").get("id"), cateId),
+                    cb.or(
+                        cb.like(b.get("title"), "%" + keyword + "%"), // 게시글 제목에서 검색
+                        cb.like(b.get("content"), "%" + keyword + "%"), // 게시글 내용에서 검색
+                        cb.like(r.get("content"), "%" + keyword + "%")  // 댓글 내용에서 검색
+                    )
+                );
+            }
         };
     }
 }
