@@ -66,11 +66,11 @@ public class BoardController {
     public String detail(Model model, 
                          @PathVariable("bno") Long bno, ReplyForm replyForm, HttpServletRequest request) {
         // 이전페이지 변수에 담기
-        String prevURL = request.getHeader("referer"); // 이전페이지 변수에 담기
-        log.info(String.format("%%%%%%% 현재 이전 페이지 : %s", prevURL));
+        //String prevURL = request.getHeader("referer"); // 이전페이지 변수에 담기
+        //log.info(String.format("%%%%%%% 현재 이전 페이지 : %s", prevURL));
         Board board = this.boardService.getBoard(bno);
         model.addAttribute("board", board);
-        model.addAttribute("prevURL", prevURL); // 이전 페이지 URL 부에 전달
+        //model.addAttribute("prevURL", prevURL); // 이전 페이지 URL 부에 전달
         return "board/detail";
     }
 

@@ -69,7 +69,7 @@
                 </li>
             </ul>
         </div>
-        <!-- 페이징 끝-->
+        <!-- 검색부분 영역 / 이 두값이 GET URL ?kw=kw&page=1 계속 가지고 감-->
         <form th:action="@{/board/list}" method="get" id="searchForm">
             <input type="hidden" id="kw" name="kw" th:value="${kw}">
             <input type="hidden" id="page" name="page" th:value="${paging.number}">

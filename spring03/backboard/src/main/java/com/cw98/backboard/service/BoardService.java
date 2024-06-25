@@ -52,8 +52,9 @@ public class BoardService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); 
 
-        Specification<Board> spec = searchBoard(keyword);
-        return this.boardRepository.findAll(spec, pageable);
+        // Specification<Board> spec = searchBoard(keyword);
+        // return this.boardRepository.findAll(spec, pageable); // Specification로 쿼리 생성로직 만들어서
+        return this.boardRepository.findAllByKeyword(keyword, pageable);
     }
 
     public Board getBoard(Long bno) {
@@ -96,7 +97,7 @@ public class BoardService {
 
             @Override
             public Predicate toPredicate(Root<Board> b, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                // Query를 jpa로 생성
+                // Query를 jpa로 생성 
                 query.distinct(true);// 중복제거
                 Join<Board, Reply> r = b.join("replyList", JoinType.LEFT); // 
                 return cb.or(cb.like(b.get("title"),"%"+ keyword + "%"), // 게시글 제목에서 검색
