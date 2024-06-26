@@ -55,7 +55,7 @@ public class BoardController {
     //     return "board/list"; // templates/board/list.html 렌더링해서 리턴하라!
     // }
     // 2024.06.24 list 새로 변경
-    @GetMapping("/list")
+    //@GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page, 
                         @RequestParam(value = "kw", defaultValue = "")String keyword) {
         Page<Board> paging = this.boardService.getList(page, keyword); // 검색추가 
@@ -86,7 +86,9 @@ public class BoardController {
         // 이전페이지 변수에 담기
         //String prevURL = request.getHeader("referer"); // 이전페이지 변수에 담기
         //log.info(String.format("%%%%%%% 현재 이전 페이지 : %s", prevURL));
-        Board board = this.boardService.getBoard(bno);
+        // Board board = this.boardService.getBoard(bno);
+        Board board = this.boardService.hitBoard(bno); // 조회수 증가하고 리턴
+
         model.addAttribute("board", board);
         //model.addAttribute("prevURL", prevURL); // 이전 페이지 URL 부에 전달
         return "board/detail";

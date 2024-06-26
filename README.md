@@ -474,21 +474,127 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
         - /templates/list.html 카테고리 변수 추가
         - /controller/BoardController.java create() GET, POST메서드에 category추가!
 
-    4. 조회수 표시
+## 11일차
+- Spring Boot JPA 프로젝트 개발 계속
+    0. RestFull URL이 잘못된 부분
+        - /controller/MainController.java main() 메서드 URL 변경
+    1. 조회수 표시
         - /entity/Board.java 조회수 필드 추가
-        - /service/BoardService.java 메서드 추가
+        - /service/BoardService.java hitBoard() 메서드 추가
         - /controller/Boardcontroller.java detail() 메서드 수정
         - /templates/board/list.html 조회수 컬럼 추가
+        - db를 Oracle -> H2
 
+    2. AWS 활용
+    - 인스턴스 클릭 > 인스턴스 생성 버튼 클릭
+        - 리전 서울
+        - 인스턴스 이미지 Linux/Unix
+        - 블루프린트 선택 > 운영체제(OS)적용 > Ubuntu 22.04LTS
+        - 인스턴스 플랜 > 듀얼 선택
+        - 크기 선택 > 월별 $12 선택(무료 중 가장 스팩이 좋음)
+        - 인스턴스 확인 > Ubuntu-cw 변경 후 
+        - 인스턴스 생성 클릭 !
+        - 실행 중 확인 > ⁝ 클릭 관리
+        - 네트워킹 > 고정 IP연결 > 아이피명 StaticIp-cw 입력 > 생성
+        - IPv4 방화벽 > 규칙 추가 > 8080 추가
+        - 계정 > SSH 키 > 기본 키 다운로드(*.pem)
 
-	- 앵커기능 
-	- 마크다운 적용, 마크다운에디터 추가
-	- 검색기능
-	- 카테고리 추가(게시판, QnA, 공지사항)
-	- 비밀번호 찾기, 비밀번호 변경
-	- 조회수 추가
+    - puTTY AWS 리눅스 서버 연결
+        - https://www.putty.org/ -> https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html -> putty-64bit-0.81-installer.msi 설치 
+        - PuTTYgen 실행 > Load 기본키 선택 > sAVE PRIVATE KEY 클릭 > .ppk로 저장
+        - PuTTY 실행
+            - Host Name : AWS 고정아이피 입력
+            - Connection > SSH > Auth > Credentials : Private Key를 .ppk로 선택
+            - Session > Saved Session명 입력 > Save
+            - Open 후 콘솔 login as: ubuntu 입력
 
-	- 리액트 적용
+        - FileZilla로 FTP 연결
+        - 파일질라 다운로드
+        - 사이트 관리자 열기
+            - 새 사이트
+            - 새 프로토콜 ㅣ SFTP
+            - 호스트 : 고정아이피 입력
+            - 로그온 유형 : 키 파일
+            - 사용자 : ubuntu
+            - 키 파일 : *.ppk 선택
+            - 연결
+    
+    - PuTTY 설정 변경
+        '''shell
+        > sudo ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime (한국 시간 변경)
+        >  hostname
+        > sudo hostnamectl set-hostname cw98
+        > sudo reboot (서버 재시작)
+
+        > sudo apt-get update (전체서버 패키지 업데이트)
+        > java
+        > sudo apt-get install openjdk-17-jdk
+          Do you want to continue? [Y/N] y
+        > java -version
+            openjdk version "17.0.11" 2024-04-16
+            OpenJDK Runtime Environment (build 17.0.11+9-Ubuntu-122.04.1)
+            OpenJDK 64-Bit Server VM (build 17.0.11+9-Ubuntu-122.04.1, mixed mode, sharing)
+        '''
+        - VSCode
+            - Gradle for Java > Tasks > build > bootJar
+            - *-SNAPSHOT.jar 생성 확인
+
+        - FileZilla
+            - *.jar > AWS로 전송
+
+        - Putty
+            '''shell
+            > ls
+            '''
+            > cd bootserver
+            > ls
+            backboard-1.0.1-SNAPSHOT.jar
+            > java -jar backboard-1.0.1-SNAPSHOT.jar
+            '''
+            - sudo java -jar... 로 실행하면 안되요~
+
+        - 스프링부트서버 백그라운드 실행 쉘 작성
+           - > nano start.sh
+            ```shell
+            #!/bin/bash
+
+            JAR=backboard-1.0.2-SNAPSHOT.jar
+            LOG=/home/ubuntu/bootserver/backbord_log.log
+
+            nohup java -jar $JAR > $LOG 2>&1 &
+            ```
+         - 파일권한 바꾸기(실행가능)
+            ```shell
+            > chmod +x start.sh
+            ```
+
+         - > nano stop.sh
+            ```shell
+            #!/bin/bash
+
+            BB_PID=$(ps -ef | grep java | grep backboard | awk '{print $2}')
+
+            if [ -z "$BB_PID" ];
+            then
+               echo "BACKBOARD is not running"
+            else
+               kill -9 $BB_PID
+               echo "BACKBOARD terminated!"
+            fi
+            ```
+         - 파일권한 바꾸기(실행가능)
+            ```shell
+            > chmod +x stop.sh
+            ```
+         
+         - 서버실행
+
+    - 에러페이지 작업(404, 500, etc)
+    - 비밀번호 찾기, 비밀번호 변경
+    - 소셜 로그인(카카오, 네이버, 구글) 구글
+    - 파일업로드 - AWS S3 체크
+
+    - 리액트 적용
 	- 리액트로 프론트엔드 설정
 	- thymeleaf - 리액트로 변경
 	- Spring boot RestAPI 작업
@@ -497,7 +603,6 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
 	- 서버 접속 프로그램 설정
 	- 웹서버 배포
 	- 8080 -> 80 서버
-	- http -> https 변경	
-
+	- http -> https 변경
 
 
