@@ -612,17 +612,52 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
         - https://www.postman.com/ 다운로드
 
 
+## 12일차
+- Spring Boot JPA 프로젝트 개발 계속
+     0. 메일작업 중 생긴 오류
+        - 로그인하고 글 적으려면 500에러 발생
+        - CSRF토큰 때문에 발생하는 오류
+        - /board/create.html/reply/modify.html에 있는 csrf관련 태그 주석처리! 
+
+     1. 비밀번호 초기화 (계속)
+        - /templates/member/login.html 비밀번호 초기화 버튼
+        - /controller/MemberController.java
+        - /templates/member/reset.html 생성 -> register.html 가져와서 수정
+        - /controller/MainController.java 생성/mail/reset-mail GET매핑 메서드 생성
+        - /service/MemberService.java에 메일주소로 검색하는 메서드(getMemberByEmail()) 추가
+        - /service/MailService.java에 메일전송 메서드 생성, 수정
+            - UUID를 생성해서 메일로 전송하는 기능 추가
+
+        <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp013.png" width="730">
+
+
+        - /entity/Reset.java 생성
+
+        - /repository/ResetRepository.java 생성
+        - /service/ResetService.java 인터페이스 생성, findByUuid() 추가
+        - /service/ResetService.java 생성
+        - /service/MailService.java에 ResetService 객체 생성, 메일전송 후 setReset() 사용
+        - /controller/MemberController.java, /mai;/reset-password Get메서드 작성
+        - templates/member/newpassword.html 생성
+        - /controller/MemberController.java, /member/reset-password Post메서드 작성
+        - /service/MemberService.java에 setMember() 메서드 추가
+
+        <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/sp014.png" width="730">
+        
 ## 13일차
 - Spring Boot JPA 프로젝트 개발 계속
-     1. 비밀번호 초기화 (계속)
-        - 로그인 화면에서 비밀번호 초기화 버튼, AJAX로 RestAPI로 메일 보내기
-        - 매일에 링크 클릭
+    1. frontboard(React)
+
+    2. backboard(Rest API)
+        
+        
+        
         - http://localhost:8080/user/resetpassword(회원가입과 유사하게 개발)
 
         - 비밀번호 초기화 화면으로 이동
         - 비밀번호, 비밀번호 확인 입력
 
-    2. 구글 로그인
+    3. 구글 로그인
         - 구글클라우드 콘솔
         - 프로젝트 생성
         - OAuth 동의화면 설정
