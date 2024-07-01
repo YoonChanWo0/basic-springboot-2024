@@ -759,12 +759,58 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
         6. 목록 표시
             - for, map() 함수를 많이 사용
             - map() 을 쓰면 for문보다 짧게 구현 가능
+            - 각 child 요소마다 key 속성이 필요(없으면 경고!!)
 
             <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/react001.png" width="730">
 
-- Spring Boot JPA 프로젝트 개발 계속
+        7. 이벤트 헨들링
+            - form + onSubmit, tag ++ onClick
+            - 이벤트 파라미터 전달
+            - 파라미터가 필요해서 함수뒤에 ()를 쓰면 이벤트 순서에 따라 리플레시 후 자동 실행됨
+            - onClick={() => function()} 람다식으로 변경
 
-    1. frontboard(React)
+        8. 컴포넌트 간 데이터 전달
+            - props 속성
+            - props.속성이름.key이름
+
+             <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/react002.png" width="730">
+
+        9. 화면 업데이트
+            - useState : 앱 화면의 상태를 기억하고, 사용하기 위한 값
+            - import {useState} from 'react'; 필수
+            - const [const, setCount] = useState(0);
+
+        10. Hooks
+            - use로 시작하는 함수를 Hooks라고 호칭. State, Effect외 잘안씀
+            - useState : React 컴포넌트 상태를 추가, 보관
+            - useEffect : 컴포넌트에서 사이드이팩트 수행할 때
+            - 기타 : useontext, useReducer, userCallback, useRef....
+
+    - 리액트 추가내용
+    1. 리액트 관련 프레임워크
+        - Next.js - 풀스택 React프레임워크
+        - Gatsby - ㅈ어적사이트 React프레임워크
+        - React Native - Android, ios 멀티플랫폼 모바일 프레임워크
+
+    2. npm으로 추가 라이브러리 설치
+        - > npm install react react-dom
+
+    3. VS Code 확장
+        - ES7 + React/Redux/React-Native snippet 설치
+        - VSCode React Refactor : 리팩팅 도구
+        - Simple React Snippets
+        - Import Cost : 라이브러리 비용 계산
+
+    4. 리엑트 개발자 도구
+        - 크롬용, 엣지 브라우저별로 따로 존재
+        - React Developer Tools 설치(구글에서 검색)
+
+
+## 14일차
+- Spring Boot React 연동 프로젝트 개발 계속
+    1. 리엑트 프로젝트 생성
+        - 터미널 / spring03으로 이동
+        <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/cw001.png" width="730">
 
 
 
