@@ -808,15 +808,73 @@ Java 빅데이터 개발자 과정 Spring Boot 학습 리포지토리
 
 ## 14일차
 - Spring Boot React 연동 프로젝트 개발 계속
+    0. 실행
+       - C:\source\basic-springboot-2024>cd spring03\frontboard
+
+       - C:\source\basic-springboot-2024\spring03\frontboard>npm start
+
     1. 리엑트 프로젝트 생성
         - 터미널 / spring03으로 이동
         <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/cw001.png" width="730">
 
 
 
-    2. backboard(Rest API)
+    2. SpringBoot / React 같이 개발할 떄
+    - Spring Boot 웹서버 실행
+    - React 프론트 웹서버 실행
         
-        
+    3. 리엑트 라이브러리 설치, npm
+        - 리액트용 Bootstrap 설치
+        - npm install react-bootstrap bootstrap -> css 디자인
+        - **TIP npm audix fix --force는 절대 하지 말것!!**
+        - > npm install axios - REST API 통신 라이브러리
+        - > npm install react-router-dom -> 리엑트 화면 네비게이션
+        - > npm install react-js-pagination -> 리액트 페이징 처리
+
+    4. frontboard 개발 시작
+        - App.js, logo.svg 삭제, react-router-dom으로 Routes, Route 사용
+        - index.js, reportWebVitals() 삭제 
+        - index.js, <React.StrictMode>삭제 또는 주석
+        - /src/layout/Header.js, Footer.js를 생성
+        - /src/routes/Home.js, BoardList.js, QnaList.js, Login.js 생성
+        - App.js에 Route될 화면 추가
+        - Header.js 에 react-router-dom 추가, Link, useNavigate 사용
+
+    
+
+    5. backboard RestAPI 추가
+        - restcontroller/RestBoardController.java 생성, BoardController에 있는 메서드 복사
+        - Spring Boot와 Rest API 간의 리턴데이터 차이 떄문에 100& 호환 안됨
+
+
+    6. backboard RestAPI 변경
+        - (문제!) Spring Boot에서 만든 Enitiy는 Board와 Reply 등의 OneTOOne가 JSON으로 변경할 떄 문제발생!
+        - /Entity를 그대로 사용하지 말고, RestAPI에서는 다른 클래스를 만들어야 함
+        - /dto/BoardDto.java 생성
+        - /dto/ReplyDto.java 생성
+        - /RestBoardController.java getList()를 Board Entity -> BoardDto로 변경
+        - /security/SecurityConfig.java CORS 설정 추가
+
+    7. frontboard 개발 계속
+        - BoardList.js axios RestAPI 호출내용 추가
+        - 테이블 내용을 boardList.map() 10개 리스트 디스플레이
+
+            <img src="https://raw.githubusercontent.com/YoonChanWo0/basic-springboot-2024/main/images/react003.png" width="730">
+
+
+
+## 15일차
+- Spring Boot React 연동 프로젝트 개발 계속
+    1. 상세화면
+
+    2. 입력화면
+
+    3. 페이징
+
+    4. 로그인
+
+
+
         
         - http://localhost:8080/user/resetpassword(회원가입과 유사하게 개발)
 
