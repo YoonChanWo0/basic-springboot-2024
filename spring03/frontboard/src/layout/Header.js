@@ -4,13 +4,28 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
 
+    const navigate = useNavigate(); // Hook함수는 직접 사용불가
+
+    function gotoLogin() {
+        navigate('/login');
+    }
+
+    function logout() {
+        localStorage.setItem("username", "");
+        localStorage.setItem("email", "");
+        localStorage.setItem("mid", "");
+        localStorage.setItem("role", "");
+        localStorage.setItem("loginDt", "");
+        window.location.replace("http://localhost:3000/home"); // URL 재시작
+    }
+
     // return은 화면을 그리겠다.
-    return(
+    return (
         <div className="containter header">
             <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
                 <div id="logo-area" className="col-md-1 mb-2 mb-md-0">
                     <a href="/home" className="d-inline-flex link-body-emphasis text-decoration-none">
-                        <img src={require('../logo.png')} alt='logo' width={40}/>
+                        <img src={require('../logo.png')} alt='logo' width={40} />
                     </a>
                 </div>
 
@@ -21,9 +36,16 @@ const Header = () => {
                 </ul>
 
                 <div className='col-md-3 text-end me-3'>
-                    로그인
-                    회원가입
+                    {localStorage.getItem("username") != "" ? (
+                        <button type='button' className='btn btn-outline-primary' onClick={logout}>로그아웃</button>
+                    ) : (
+                        <>
+                            <button type='button' className='btn btn-outline-primary me-2' onClick={gotoLogin}>로그인</button>
+                            <button type='button' className='btn btn-primary'>회원가입</button>
+                        </>
+                    )}
                 </div>
+
             </header>
         </div>
     );

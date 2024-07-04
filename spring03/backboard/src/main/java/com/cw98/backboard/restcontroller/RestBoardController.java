@@ -94,33 +94,41 @@ public class RestBoardController {
 
     @GetMapping("/detail/{bno}")
     @ResponseBody
-    public BoardDto detail(@PathVariable("bno") Long bno, HttpServletRequest request) {
+    public Header<BoardDto> detail(@PathVariable("bno") Long bno, HttpServletRequest request) {
         
-        String prevURL = request.getHeader("referer"); // 이전페이지 변수에 담기
-        // log.info(String.format("%%%%%%% 현재 이전 페이지 : %s", prevURL));
-        // Board board = this.boardService.getBoard(bno);
-        Board _board = this.boardService.hitBoard(bno); // 조회수 증가하고 리턴
-        BoardDto board = BoardDto.builder()
-                        .bno(_board.getBno())
-                        .title(_board.getTitle())
-                        .content(_board.getContent()).createDate(_board.getCreateDate())
-                        .modifyDate(_board.getModifyDate())
-                        .writer(_board.getWriter()!=null ? _board.getWriter().getUsername() : "")
-                        .build();
+        
+         try {
+                String prevURL = request.getHeader("referer"); // 이전페이지 변수에 담기
+            // log.info(String.format("%%%%%%% 현재 이전 페이지 : %s", prevURL));
+            // Board board = this.boardService.getBoard(bno);
+            Board _board = this.boardService.hitBoard(bno); // 조회수 증가하고 리턴
+            BoardDto board = BoardDto.builder()
+                            .bno(_board.getBno())
+                            .title(_board.getTitle())
+                            .content(_board.getContent()).createDate(_board.getCreateDate())
+                            .modifyDate(_board.getModifyDate())
+                            .writer(_board.getWriter()!=null ? _board.getWriter().getUsername() : "")
+                            .build();
 
-        List<ReplyDto> replyList = new ArrayList<>();
-        if (_board.getReplyList().size()>0) {
-            _board.getReplyList().forEach(rpy -> replyList.add(ReplyDto.builder().content(rpy.getContent())
-                                                              .createDate(rpy.getCreateDate()).modifyDate(rpy.getModifyDate())
-                                                              .rno(rpy.getRno())
-                                                              .writer(rpy.getWriter() != null ? rpy.getWriter().getUsername():"")
-                                                              .build()));
-        }
+            List<ReplyDto> replyList = new ArrayList<>();
+            if (_board.getReplyList().size()>0) {
+                _board.getReplyList().forEach(rpy -> replyList.add(ReplyDto.builder().content(rpy.getContent())
+                                                                .createDate(rpy.getCreateDate()).modifyDate(rpy.getModifyDate())
+                                                                .rno(rpy.getRno())
+                                                                .writer(rpy.getWriter() != null ? rpy.getWriter().getUsername():"")
+                                                                .build()));
+            }
 
-        board.setReplyList(replyList);
+            board.setReplyList(replyList);
+
+            return Header.OK(board);
+            
+         } catch (Exception e) {
+            return Header.OK(e.getMessage());
+         }
 
         // model.addAttribute("board", board);
         //model.addAttribute("prevURL", prevURL); // 이전 페이지 URL 부에 전달
-        return board;
+        
     }
 }
